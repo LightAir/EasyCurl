@@ -22,35 +22,35 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
     /** @test */
 	public function successfulResponse()
 	{
-        $ec = new EasyCurl(static::URL . '/success.php');
+        $ecu = new EasyCurl(static::URL . '/success.php');
 
-        $result = $ec->get();
+        $result = $ecu->get();
 
-		$this->assertEquals(200, $ec->getHttpStatusCode());
+		$this->assertEquals(200, $ecu->getHttpStatusCode());
 		$this->assertEquals('OK', $result);
-		$this->assertNotNull($ec->getRawResponseHeaders());
-		$this->assertNotNull($ec->getResponseHeaders());
+		$this->assertNotNull($ecu->getRawResponseHeaders());
+		$this->assertNotNull($ecu->getResponseHeaders());
 	}
 
     /** @test */
 	public function failedResponse()
 	{
-        $ec = new EasyCurl(static::URL . '/failure.php');
+        $ecu = new EasyCurl(static::URL . '/failure.php');
 
-        $result = $ec->get();
+        $result = $ecu->get();
 
-        $this->assertEquals(500, $ec->getHttpStatusCode());
+        $this->assertEquals(500, $ecu->getHttpStatusCode());
         $this->assertEquals('Failure', $result);
-        $this->assertEquals('HTTP/1.1 500 Internal Server Error', $ec->getHttpErrorMessage());
-        $this->assertNotNull($ec->getRawResponseHeaders());
+        $this->assertEquals('HTTP/1.1 500 Internal Server Error', $ecu->getHttpErrorMessage());
+        $this->assertNotNull($ecu->getRawResponseHeaders());
 	}
 
     /** @test */
 	public function queryRequestBody()
 	{
-        $ec = new EasyCurl(static::URL . '/echo.php');
+        $ecu = new EasyCurl(static::URL . '/echo.php');
 
-        $result = $ec->post(['foo' => 'bar']);
+        $result = $ecu->post(['foo' => 'bar']);
 
         $this->assertEquals('foo=bar', $result);
 	}
@@ -58,12 +58,12 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
 	/** @test */
 	public function curlError()
 	{
-        $ec = new EasyCurl('httpg://0.0.0.0.0.0');
-        $ec->get();
+        $ecu = new EasyCurl('httpg://0.0.0.0.0.0');
+        $ecu->get();
 
-        $this->assertTrue($ec->isCurlError());
-        $this->assertTrue($ec->isError());
-        $this->assertEquals(1, $ec->getCurlErrorCode());
+        $this->assertTrue($ecu->isCurlError());
+        $this->assertTrue($ecu->isError());
+        $this->assertEquals(1, $ecu->getCurlErrorCode());
 
 	}
 

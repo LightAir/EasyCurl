@@ -62,13 +62,6 @@ class EasyCurl
      */
     private $timeOut = 10;
 
-    /**
-     * Debug mode TODO
-     *
-     * @var bool
-     */
-    private $debug = false;
-
     private $curl;
     private $options;
 
@@ -249,20 +242,6 @@ class EasyCurl
     }
 
     /**
-     * Debug mode setter
-     *
-     * @param bool $debug
-     *
-     * @return $this
-     */
-    public function setDebug($debug = false)
-    {
-        $this->debug = (bool)$debug;
-
-        return $this;
-    }
-
-    /**
      * Change header content type
      *
      * @param string $type
@@ -331,7 +310,6 @@ class EasyCurl
             return $akey . ': ' . $aval;
         };
 
-        // TODO
         $finishedHeaders = array_map($callback, $headers, array_keys($headers));
 
         $this->setOpt(CURLOPT_HTTPHEADER, $finishedHeaders);
