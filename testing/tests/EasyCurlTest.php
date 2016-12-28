@@ -64,7 +64,6 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($ec->isCurlError());
         $this->assertTrue($ec->isError());
         $this->assertEquals(1, $ec->getCurlErrorCode());
-        $this->assertEquals('Protocol "httpg" not supported or disabled in libcurl', $ec->getCurlErrorMessage());
 
 	}
 
