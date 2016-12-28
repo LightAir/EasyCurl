@@ -13,6 +13,7 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
 		if (!getenv('CURL_TEST_SERVER_RUNNING')) {
 			$this->markTestSkipped('The web server is not running.');
 		}
+
 		if (!extension_loaded('curl')) {
 			$this->markTestSkipped('The curl extension is not installed.');
 		}
