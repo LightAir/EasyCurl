@@ -16,95 +16,63 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
 		if (!extension_loaded('curl')) {
 			$this->markTestSkipped('The curl extension is not installed.');
 		}
-
-
 	}
 
-	/** @test */
+    /** @test */
 	public function successfulResponse()
 	{
-        $ec = new EasyCurl('http://localhost:3351/success.php');
+        $ec = new EasyCurl(static::URL . '/success.php');
 
-        dump($ec->get());
+        $result = $ec->get();
 
-		$this->assertEquals(200, $r->statusCode);
-		$this->assertEquals('200 OK', $r->statusText);
-		$this->assertEquals('OK', $r->body);
-		$this->assertNotNull($r->headers);
-		$this->assertNotNull($r->info);
+		$this->assertEquals(200, $ec->getHttpStatusCode());
+		$this->assertEquals('OK', $result);
+		$this->assertNotNull($ec->getRawResponseHeaders());
+		$this->assertNotNull($ec->getResponseHeaders());
 	}
-	/** @test */
+
+    /** @test */
 	public function failedResponse()
 	{
-		$r = $this->makeCurl()->get(static::URL.'/failure.php');
-		$this->assertEquals(500, $r->statusCode);
-		$this->assertEquals('500 Internal Server Error', $r->statusText);
-		$this->assertEquals('Failure', $r->body);
-		$this->assertNotNull($r->headers);
-		$this->assertNotNull($r->info);
+        $ec = new EasyCurl(static::URL . '/failure.php');
+
+        $result = $ec->get();
+
+        $this->assertEquals(500, $ec->getHttpStatusCode());
+        $this->assertEquals('Failure', $result);
+        $this->assertEquals('HTTP/1.1 500 Internal Server Error', $ec->getHttpErrorMessage());
+        $this->assertNotNull($ec->getRawResponseHeaders());
 	}
-	/** @test */
+
+    /** @test */
 	public function queryRequestBody()
 	{
-		$r = $this->makeCurl()->post(static::URL.'/echo.php', array('foo' => 'bar'));
-		$this->assertEquals('foo=bar', $r->body);
+        $ec = new EasyCurl(static::URL . '/echo.php');
+
+        $result = $ec->post(['foo' => 'bar']);
+
+        $this->assertEquals('foo=bar', $result);
 	}
+
 	/** @test */
-	public function jsonRequestBody()
+	public function curlError()
 	{
-		$r = $this->makeCurl()->jsonPost(static::URL.'/echo.php', array('foo' => 'bar'));
-		$this->assertEquals('{"foo":"bar"}', $r->body);
+        $ec = new EasyCurl('httpg://0.0.0.0.0.0');
+        $ec->get();
+
+        $this->assertTrue($ec->isCurlError());
+        $this->assertTrue($ec->isError());
+        $this->assertEquals(1, $ec->getCurlErrorCode());
+        $this->assertEquals('Protocol "httpg" not supported or disabled in libcurl', $ec->getCurlErrorMessage());
+
 	}
-	/** @test */
-	public function rawRequestBody()
-	{
-		$r = $this->makeCurl()->rawPost(static::URL.'/echo.php', '<foo/>');
-		$this->assertEquals('<foo/>', $r->body);
-	}
-	/** @test */
-	public function fileUpload()
-	{
-		$file = __FILE__;
-		if (function_exists('curl_file_create')) {
-			$data = array('file' => curl_file_create($file));
-		} else {
-			$data = array('file' => '@'.$file);
-		}
-		$r = $this->makeCurl()->rawPost(static::URL.'/upload.php', $data);
-		$this->assertEquals(basename($file)."\t".filesize($file)."\n", $r->body);
-	}
-	/** @test */
-	public function throwsExceptionOnCurlError()
-	{
-		$this->setExpectedException('anlutro\cURL\cURLException', 'cURL request failed with error [7]:');
-		$this->makeCurl()->get('http://0.0.0.0');
-	}
-	/** @test */
-	public function throwsExceptionWithMissingUrl()
-	{
-		$this->setExpectedException('BadMethodCallException', 'Missing argument 1 ($url) for anlutro\cURL\cURL::get');
-		$this->makeCurl()->get();
-	}
-	/** @test */
-	public function throwsExceptionWhenDataProvidedButNotAllowed()
-	{
-		$this->setExpectedException('InvalidArgumentException', 'HTTP method [options] does not allow POST data.');
-		$this->makeCurl()->options('http://localhost', array('foo' => 'bar'));
-	}
-	/** @test */
-	public function defaultHeadersAreAdded()
-	{
-		$curl = $this->makeCurl();
-		$curl->setDefaultHeaders(array('foo' => 'bar'));
-		$request = $curl->newRequest('post', 'localhost');
-		$this->assertEquals('bar', $request->getHeader('foo'));
-	}
-	/** @test */
-	public function defaultOptionsAreAdded()
-	{
-		$curl = $this->makeCurl();
-		$curl->setDefaultOptions(array('foo' => 'bar'));
-		$request = $curl->newRequest('post', 'localhost');
-		$this->assertEquals('bar', $request->getOption('foo'));
-	}
+
+
+    /** @test */
+    //    public function te()
+    //    {
+    //        $ec = new EasyCurl(static::URL . '/echo.php');
+    //        $ec->setHeader('foo', 'bar');
+    //        $ec->get();
+    //    }
 }
