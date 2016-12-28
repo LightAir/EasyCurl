@@ -1,0 +1,13 @@
+/tmp
+/log
+/logs
+/lumen.log
+/vendor
+/nbproject
+.env
+.idea
+.directory
+debug.cb-cp.com.iml
+npm-debug.log
+/node_modules
+.blackfire.yml

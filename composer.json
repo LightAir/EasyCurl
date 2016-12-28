@@ -1,0 +1,35 @@
+{
+  "name": "lightair/easycurl",
+  "description": "A basic CURL wrapper for PHP",
+  "keywords": [
+    "curl",
+    "easycurl",
+    "http",
+    "request"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "LightAir",
+      "email": "public@softroot.ru",
+      "homepage": "http://softroot.ru",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+      "issues": "https://github.com/LightAir/EasyCurl/issues"
+  },
+  "require": {
+    "php": ">=5.6.0"
+  },
+  "require-dev": {
+    "laravel/lumen-framework": "5.1.*",
+    "phpunit/phpunit": "^5.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "LightAir\\EasyCurl\\": "src/"
+    }
+  }
+}
