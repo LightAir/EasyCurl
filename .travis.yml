@@ -4,8 +4,8 @@ php:
   - 5.6
   - 7.0
 
-install: composer install --dev
+install: composer install
 
-script: ./test-run.sh
+script: ./test-run.sh -v
 
 sudo: false
