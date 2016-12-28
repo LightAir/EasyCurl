@@ -13,4 +13,9 @@ $easyCurl = new EasyCurl('http://yandex.ru');
 $result = $easyCurl->get();
 ```
 
+## tests
+```shell
+./tests-run.sh
+```
+
 @TODO Необходимо написать тесты!
