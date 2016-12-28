@@ -263,36 +263,6 @@ class EasyCurl
     }
 
     /**
-     * Set header
-     *
-     * @param string $headerName
-     * @param string $headerValue
-     *
-     * @return $this
-     */
-    public function setHeader($headerName, $headerValue)
-    {
-        $this->headers[$headerName] = $headerValue;
-
-        $headers = [];
-
-        foreach ($this->headers as $key => $value) {
-            $headers[$key] = $value;
-        }
-
-        $callback = function ($aval, $akey) {
-            return $akey . ': ' . $aval;
-        };
-
-        // TODO
-        $finishedHeaders = array_map($callback, $headers, array_keys($headers));
-
-        $this->setOpt(CURLOPT_HTTPHEADER, $finishedHeaders);
-
-        return $this;
-    }
-
-    /**
      * Change header content type
      *
      * @param string $type
@@ -339,6 +309,35 @@ class EasyCurl
         return $this;
     }
 
+    /**
+     * Set header
+     *
+     * @param string $headerName
+     * @param string $headerValue
+     *
+     * @return $this
+     */
+    public function setHeader($headerName, $headerValue)
+    {
+        $this->headers[$headerName] = $headerValue;
+
+        $headers = [];
+
+        foreach ($this->headers as $key => $value) {
+            $headers[$key] = $value;
+        }
+
+        $callback = function ($aval, $akey) {
+            return $akey . ': ' . $aval;
+        };
+
+        // TODO
+        $finishedHeaders = array_map($callback, $headers, array_keys($headers));
+
+        $this->setOpt(CURLOPT_HTTPHEADER, $finishedHeaders);
+
+        return $this;
+    }
 
     /**
      * Set Options
@@ -355,102 +354,15 @@ class EasyCurl
     }
 
     /**
-     * Header Callback
+     * Performs post request
      *
-     * @param  $ch
-     * @param  $header
-     *
-     * @return integer
-     */
-    private function headerCallback($ch, $header)
-    {
-        $this->rawResponseHeaders .= $header;
-        return strlen($header);
-    }
-
-    /**
-     * Build query
-     */
-    public function buildQuery()
-    {
-        if ($this->proxy) {
-            $this->setOpt(CURLOPT_PROXY, $this->proxy);
-        }
-
-        $this->setOpt(CURLOPT_RETURNTRANSFER, true);
-        $this->setOpt(CURLOPT_USERAGENT, $this->userAgent);
-        $this->setOpt(CURLOPT_CONNECTTIMEOUT, $this->timeOut);
-        $this->setOpt(CURLINFO_HEADER_OUT, true);
-        $this->setOpt(CURLOPT_HEADERFUNCTION, array($this, 'headerCallback'));
-
-        if (!is_null($this->login) && !is_null($this->password)) {
-            $this->setOpt(CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-            $this->setOpt(CURLOPT_USERPWD, $this->login . ':' . $this->password);
-        }
-
-    }
-
-    /**
-     * Execution request
+     * @param array $data
      *
      * @return mixed
      */
-    private function exec()
+    public function post($data = [])
     {
-        $this->buildQuery();
-
-        $this->response = curl_exec($this->curl);
-
-        // curl
-        $this->curlErrorCode = curl_errno($this->curl);
-        $this->curlErrorMessage = curl_error($this->curl);
-        $this->curlError = !($this->curlErrorCode === 0);
-
-        // http
-        $this->httpStatusCode = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
-        $this->httpError = in_array(floor($this->httpStatusCode / 100), array(4, 5));
-        $this->httpErrorCode = $this->httpError ? $this->httpStatusCode : 0;
-
-        // base
-        $this->error = $this->curlError || $this->httpError;
-
-        if(!$this->curlError){
-            $this->responseHeaders = $this->headerParse($this->rawResponseHeaders);
-        }
-
-        if($this->httpError){
-            $this->httpErrorMessage = $this->responseHeaders['Status-Line'];
-        }
-
-        return $this->response;
-    }
-
-    /**
-     * Parser for headers
-     *
-     * @param $rawHeader
-     *
-     * @return array
-     */
-    private function headerParse($rawHeader)
-    {
-
-        $headers = array();
-
-        $headerLine = substr($rawHeader, 0, strpos($rawHeader, "\r\n\r\n"));
-
-        foreach (explode("\r\n", $headerLine) as $i => $line)
-        {
-            if ($i === 0)
-                $headers['Status-Line'] = $line;
-            else {
-                list ($key, $value) = explode(': ', $line);
-
-                $headers[$key] = $value;
-            }
-        }
-
-        return $headers;
+        return $this->query('post', $data);
     }
 
     /**
@@ -489,15 +401,87 @@ class EasyCurl
     }
 
     /**
-     * Performs post request
-     *
-     * @param array $data
+     * Execution request
      *
      * @return mixed
      */
-    public function post($data = [])
+    private function exec()
     {
-        return $this->query('post', $data);
+        $this->buildQuery();
+
+        $this->response = curl_exec($this->curl);
+
+        // curl
+        $this->curlErrorCode = curl_errno($this->curl);
+        $this->curlErrorMessage = curl_error($this->curl);
+        $this->curlError = !($this->curlErrorCode === 0);
+
+        // http
+        $this->httpStatusCode = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
+        $this->httpError = in_array(floor($this->httpStatusCode / 100), array(4, 5));
+        $this->httpErrorCode = $this->httpError ? $this->httpStatusCode : 0;
+
+        // base
+        $this->error = $this->curlError || $this->httpError;
+
+        if (!$this->curlError) {
+            $this->responseHeaders = $this->headerParse($this->rawResponseHeaders);
+        }
+
+        if ($this->httpError) {
+            $this->httpErrorMessage = $this->responseHeaders['Status-Line'];
+        }
+
+        return $this->response;
+    }
+
+    /**
+     * Build query
+     */
+    public function buildQuery()
+    {
+        if ($this->proxy) {
+            $this->setOpt(CURLOPT_PROXY, $this->proxy);
+        }
+
+        $this->setOpt(CURLOPT_RETURNTRANSFER, true);
+        $this->setOpt(CURLOPT_USERAGENT, $this->userAgent);
+        $this->setOpt(CURLOPT_CONNECTTIMEOUT, $this->timeOut);
+        $this->setOpt(CURLINFO_HEADER_OUT, true);
+        $this->setOpt(CURLOPT_HEADERFUNCTION, array($this, 'headerCallback'));
+
+        if (!is_null($this->login) && !is_null($this->password)) {
+            $this->setOpt(CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            $this->setOpt(CURLOPT_USERPWD, $this->login . ':' . $this->password);
+        }
+
+    }
+
+    /**
+     * Parser for headers
+     *
+     * @param $rawHeader
+     *
+     * @return array
+     */
+    private function headerParse($rawHeader)
+    {
+
+        $headers = array();
+
+        $headerLine = substr($rawHeader, 0, strpos($rawHeader, "\r\n\r\n"));
+
+        foreach (explode("\r\n", $headerLine) as $i => $line) {
+            if ($i === 0)
+                $headers['Status-Line'] = $line;
+            else {
+                list ($key, $value) = explode(': ', $line);
+
+                $headers[$key] = $value;
+            }
+        }
+
+        return $headers;
     }
 
     /**
@@ -537,5 +521,19 @@ class EasyCurl
     public function delete($data = [])
     {
         return $this->query('delete', $data);
+    }
+
+    /**
+     * Header Callback
+     *
+     * @param  $ch
+     * @param  $header
+     *
+     * @return integer
+     */
+    private function headerCallback($ch, $header)
+    {
+        $this->rawResponseHeaders .= $header;
+        return strlen($header);
     }
 }
