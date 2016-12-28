@@ -6,6 +6,6 @@ php:
 
 install: composer install
 
-script: ./test-run.sh -v
+script: ./tests-run.sh
 
 sudo: false
