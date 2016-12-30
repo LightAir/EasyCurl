@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/LightAir/EasyCurl/master/art/ec.png" alt="Nairbl"/>
+    <img src="https://raw.githubusercontent.com/LightAir/EasyCurl/master/art/ec.png" alt="EasyCurl"/>
 </p>
 
 EasyCurl, it a easy CURL wrapper for PHP.

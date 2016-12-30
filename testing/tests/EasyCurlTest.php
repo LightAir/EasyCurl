@@ -39,7 +39,9 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
 
         $result = $ecu->get();
 
+        $this->assertTrue($ecu->isHttpError());
         $this->assertEquals(500, $ecu->getHttpStatusCode());
+        $this->assertEquals(500, $ecu->getHttpErrorCode());
         $this->assertEquals('Failure', $result);
         $this->assertEquals('HTTP/1.1 500 Internal Server Error', $ecu->getHttpErrorMessage());
         $this->assertNotNull($ecu->getRawResponseHeaders());
@@ -50,9 +52,9 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
 	{
         $ecu = new EasyCurl(static::URL . '/echo.php');
 
-        $result = $ecu->post(['foo' => 'bar']);
+        $result = $ecu->query('post',['foo' => 'bar']);
 
-        $this->assertEquals('foo=bar', $result);
+        $this->assertRegExp('/foo=bar/', $result);
 	}
 
 	/** @test */
@@ -64,15 +66,107 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($ecu->isCurlError());
         $this->assertTrue($ecu->isError());
         $this->assertEquals(1, $ecu->getCurlErrorCode());
+        $this->assertRegExp('/not supported or disabled in libcurl/', $ecu->getCurlErrorMessage());
 
 	}
 
+    /** @test */
+    public function checkUserAgent()
+    {
+
+        $ecu = new EasyCurl(static::URL . '/echo.php');
+
+        $ecu->setUserAgent('unit test');
+        $result = $ecu->post();
+        $this->assertRegExp('/User-Agent: unit test/', $result);
+
+	}
 
     /** @test */
-    //    public function te()
-    //    {
-    //        $ec = new EasyCurl(static::URL . '/echo.php');
-    //        $ec->setHeader('foo', 'bar');
-    //        $ec->get();
-    //    }
+    public function checkBasicAuth()
+    {
+
+        $ecu = new EasyCurl(static::URL . '/echo.php');
+
+        $ecu->setPassword('123');
+        $ecu->setLogin('234');
+        $result = $ecu->get();
+        $this->assertRegExp('/Authorization: Basic MjM0OjEyMw==/', $result);
+    }
+
+    /** @test */
+    public function checkContentType()
+    {
+        $ecu = new EasyCurl(static::URL . '/echo.php');
+
+        $ecu->changeContentType('json');
+        $result = $ecu->get();
+        $this->assertRegExp('/Content-Type: application\/json/', $result);
+    }
+
+    /** @test */
+    public function checkPut()
+    {
+        $ecu = new EasyCurl(static::URL . '/echo.php');
+
+        $result = $ecu->put(['foo' => 'put']);
+        $this->assertRegExp('/PUT/', $result);
+        $this->assertRegExp('/foo=put/', $result);
+    }
+
+    /** @test */
+    public function checkPost()
+    {
+        $ecu = new EasyCurl(static::URL . '/echo.php');
+
+        $result = $ecu->put(['foo' => 'put']);
+        $this->assertRegExp('/PUT/', $result);
+        $this->assertRegExp('/foo=put/', $result);
+    }
+
+    /** @test */
+    public function checkDelete()
+    {
+        $ecu = new EasyCurl(static::URL . '/echo.php');
+
+        $result = $ecu->delete(['foo' => 'delete']);
+        $this->assertRegExp('/DELETE/', $result);
+        $this->assertRegExp('/foo=delete/', $result);
+    }
+
+    /** @test */
+    public function checkDoesNotExistMethod()
+    {
+        $ecu = new EasyCurl(static::URL . '/echo.php');
+
+        $result = $ecu->query('donotexistmethod', ['foo' => 'dne']);
+        $this->assertRegExp('/GET/', $result);
+        $this->assertRegExp('/foo: dne/', $result);
+    }
+
+    /** @test */
+    public function checkProxy()
+    {
+        $ecu = new EasyCurl(static::URL . '/echo.php');
+
+        $ecu->setProxy(self::URL);
+        $result = $ecu->get();
+
+        $this->assertRegExp('/GET/', $result);
+        $this->assertRegExp('/Proxy-Connection: Keep-Alive/', $result);
+    }
+
+    /** @test */
+    public function checkTimeOut()
+    {
+        $ecu = new EasyCurl('10.255.255.1');
+
+        $ecu->setTimeOut(1);
+        $startTime = time();
+
+        $ecu->get(['timeout']);
+
+        $this->assertEquals(1, time() - $startTime);
+        $this->assertTrue($ecu->isError());
+    }
 }

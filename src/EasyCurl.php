@@ -251,8 +251,6 @@ class EasyCurl
     public function changeContentType($type)
     {
 
-        $this->unsetHeader('Content-Type');
-
         $mime = [
             'json' => 'application/json',
             'javascript' => 'application/javascript',
@@ -265,8 +263,8 @@ class EasyCurl
         ];
 
         if (array_key_exists($type, $mime)) {
+            $this->unsetHeader('Content-Type');
             $this->setHeader('Content-Type', $mime[$type]);
-            return $this;
         }
 
         return $this;
@@ -329,18 +327,6 @@ class EasyCurl
     {
         $this->options[$option] = $value;
         return curl_setopt($this->curl, $option, $value);
-    }
-
-    /**
-     * Performs post request
-     *
-     * @param array $data
-     *
-     * @return mixed
-     */
-    public function post($data = [])
-    {
-        return $this->query('post', $data);
     }
 
     /**
@@ -414,6 +400,8 @@ class EasyCurl
     }
 
     /**
+     * @uses  headerCallback()
+     *
      * Build query
      */
     public function buildQuery()
@@ -476,6 +464,19 @@ class EasyCurl
     }
 
     /**
+     * Performs post request
+     *
+     * @param array $data
+     *
+     * @return mixed
+     */
+    public function post($data = [])
+    {
+        return $this->query('post', $data);
+    }
+
+
+    /**
      * Performs put request
      *
      * @param array $data
@@ -509,7 +510,7 @@ class EasyCurl
      *
      * @return integer
      */
-    private function headerCallback($ch, $header)
+    private function headerCallback(/** @noinspection PhpUnusedParameterInspection */ $ch, $header)
     {
         $this->rawResponseHeaders .= $header;
         return strlen($header);
