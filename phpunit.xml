@@ -15,11 +15,11 @@
              <!--yui="true" highlight="true"-->
              <!--lowUpperBound="50" highLowerBound="80"/>-->
     <!--</logging>-->
-    <!--<filter>-->
-        <!--<whitelist processUncoveredFilesFromWhitelist="true">-->
-            <!--<directory suffix=".php">src</directory>-->
-        <!--</whitelist>-->
-    <!--</filter>-->
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
     <testsuites>
         <testsuite name="Application Test Suite">
             <directory suffix=".php">./testing/tests</directory>

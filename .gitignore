@@ -12,3 +12,4 @@ debug.cb-cp.com.iml
 npm-debug.log
 /node_modules
 .blackfire.yml
+coverage.xml
