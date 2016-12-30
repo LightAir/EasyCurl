@@ -26,4 +26,3 @@ comment:
   layout: "header, diff, changes, sunburst, uncovered, tree"
   branches: null
   behavior: default
-  
