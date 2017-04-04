@@ -16,6 +16,6 @@ class EasyCurlFacade extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'ecurl';
+        return 'ECurl';
     }
 }

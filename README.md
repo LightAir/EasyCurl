@@ -14,12 +14,27 @@ EasyCurl, it a easy CURL wrapper for PHP.
 composer require lightair/easycurl
 ```
 
-## How to use
+## How to use (PHP)
 ```php
 use LightAir\EasyCurl\EasyCurl;
 
 $easyCurl = new EasyCurl('http://yandex.ru');
 $result = $easyCurl->get();
+```
+
+## How to use (With Lumen)
+In file bootstrap/app.php uncomment ```$app->withFacades();``` and add:
+```php
+$app->register(LightAir\EasyCurl\EasyCurlServiceProvider::class);
+
+if (!class_exists('ecurl')) {
+    class_alias(LightAir\EasyCurl\EasyCurlFacade::class, 'ecurl');
+}
+
+```
+
+```php
+$result = \ECurl->get([], 'http://yandex.ru');
 ```
 
 ## Run tests
