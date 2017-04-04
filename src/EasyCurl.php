@@ -85,10 +85,12 @@ class EasyCurl
      *
      * @param string $uri
      */
-    public function __construct($uri)
+    public function __construct($uri = null)
     {
-        $this->uri = $uri;
-        $this->curl = curl_init($uri);
+        if(null !== $uri){
+            $this->uri = $uri;
+            $this->curl = curl_init($uri);
+        }
     }
 
     /**
@@ -334,11 +336,22 @@ class EasyCurl
      *
      * @param string $method
      * @param array $data
+     * @param string $uri
      *
      * @return mixed
      */
-    public function query($method = 'get', $data = [])
+    public function query($method = 'get', $data = [], $uri = null)
     {
+
+        if(null !== $uri){
+            $this->uri = $uri;
+
+            if($this->curl !== null){
+                curl_close($this->curl);
+            }
+
+            $this->curl = curl_init($uri);
+        }
 
         $method = strtoupper($method);
 
@@ -454,25 +467,27 @@ class EasyCurl
      * Performs get request
      *
      * @param array $data
+     * @param string $uri
      *
      * @return mixed
      */
 
-    public function get($data = [])
+    public function get($data = [], $uri = null)
     {
-        return $this->query('get', $data);
+        return $this->query('get', $data, $uri);
     }
 
     /**
      * Performs post request
      *
      * @param array $data
+     * @param string $uri
      *
      * @return mixed
      */
-    public function post($data = [])
+    public function post($data = [], $uri = null)
     {
-        return $this->query('post', $data);
+        return $this->query('post', $data, $uri);
     }
 
 
@@ -480,26 +495,28 @@ class EasyCurl
      * Performs put request
      *
      * @param array $data
+     * @param string $uri
      *
      * @return mixed
      */
 
-    public function put($data = [])
+    public function put($data = [], $uri = null)
     {
-        return $this->query('put', $data);
+        return $this->query('put', $data, $uri);
     }
 
     /**
      * Performs delete request
      *
      * @param array $data
+     * @param string $uri
      *
      * @return mixed
      */
 
-    public function delete($data = [])
+    public function delete($data = [], $uri = null)
     {
-        return $this->query('delete', $data);
+        return $this->query('delete', $data, $uri);
     }
 
     /**
