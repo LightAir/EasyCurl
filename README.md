@@ -27,14 +27,14 @@ In file bootstrap/app.php uncomment ```$app->withFacades();``` and add:
 ```php
 $app->register(LightAir\EasyCurl\EasyCurlServiceProvider::class);
 
-if (!class_exists('ecurl')) {
-    class_alias(LightAir\EasyCurl\EasyCurlFacade::class, 'ecurl');
+if (!class_exists('ECurl')) {
+    class_alias(LightAir\EasyCurl\EasyCurlFacade::class, 'ECurl');
 }
-
 ```
 
 ```php
-$result = \ECurl->get([], 'http://yandex.ru');
+$result = \ECurl::get([], 'http://yandex.ru');
+dd($result, \ECurl::getHttpStatusCode());
 ```
 
 ## Run tests
