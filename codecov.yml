@@ -26,6 +26,7 @@ ignore:
   - "src/ecurl.php"
   - "src/EasyCurlFacade.php"
   - "src/EasyCurlServiceProvider.php"
+  - "examples/*.php"
 
 comment:
   layout: "header, diff, changes, sunburst, uncovered, tree"

@@ -29,7 +29,8 @@
   },
   "autoload": {
     "psr-4": {
-      "LightAir\\EasyCurl\\": "src/"
+      "LightAir\\EasyCurl\\": "src/",
+      "LightAir\\Examples\\": "examples/"
     }
   }
 }
