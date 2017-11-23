@@ -5,7 +5,9 @@
     "curl",
     "easycurl",
     "http",
-    "request"
+    "request",
+    "laravel",
+    "lumen"
   ],
   "type": "library",
   "license": "MIT",
