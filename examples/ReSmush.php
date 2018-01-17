@@ -18,14 +18,13 @@ class ReSmush
             json_decode(
                 $eCurl->get()
             ),
-                $eCurl->getHttpStatusCode()
+            $eCurl->getHttpStatusCode()
         );
     }
 
     public function sendImageGet()
     {
         $eCurl = new EasyCurl('http://api.resmush.it/ws.php');
-
 
         dump(
             json_decode(
@@ -35,15 +34,14 @@ class ReSmush
                     ]
                 )
             ),
-                $eCurl->getHttpStatusCode(),
-                $eCurl->getHttpErrorMessage()
+            $eCurl->getHttpStatusCode(),
+            $eCurl->getHttpErrorMessage()
         );
     }
 
     public function sendImagePost()
     {
         $eCurl = new EasyCurl('http://api.resmush.it/ws.php');
-
 
         dump(
             json_decode(
@@ -57,6 +55,4 @@ class ReSmush
             $eCurl->getHttpErrorMessage()
         );
     }
-
-
 }

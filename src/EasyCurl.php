@@ -87,7 +87,7 @@ class EasyCurl
      */
     public function __construct($uri = null)
     {
-        if(null !== $uri){
+        if (null !== $uri) {
             $this->uri = $uri;
             $this->curl = curl_init($uri);
         }
@@ -340,13 +340,13 @@ class EasyCurl
      *
      * @return mixed
      */
-    public function query($method = 'get', $data = [], $uri = null)
+    public function query($method = 'get', array $data = [], $uri = null)
     {
 
-        if(null !== $uri){
+        if (null !== $uri) {
             $this->uri = $uri;
 
-            if($this->curl !== null){
+            if ($this->curl !== null) {
                 curl_close($this->curl);
             }
 
@@ -429,7 +429,7 @@ class EasyCurl
         $this->setOpt(CURLINFO_HEADER_OUT, true);
         $this->setOpt(CURLOPT_HEADERFUNCTION, array($this, 'headerCallback'));
 
-        if (!is_null($this->login) && !is_null($this->password)) {
+        if (null !== $this->login && null !== $this->password) {
             $this->setOpt(CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
             $this->setOpt(CURLOPT_USERPWD, $this->login . ':' . $this->password);
         }
@@ -451,8 +451,9 @@ class EasyCurl
         $headerLine = substr($rawHeader, 0, strpos($rawHeader, "\r\n\r\n"));
 
         foreach (explode("\r\n", $headerLine) as $i => $line) {
-            if ($i === 0)
+            if ($i === 0) {
                 $headers['Status-Line'] = $line;
+            }
             else {
                 list ($key, $value) = explode(': ', $line);
 
@@ -472,7 +473,7 @@ class EasyCurl
      * @return mixed
      */
 
-    public function get($data = [], $uri = null)
+    public function get(array $data = [], $uri = null)
     {
         return $this->query('get', $data, $uri);
     }
@@ -485,7 +486,7 @@ class EasyCurl
      *
      * @return mixed
      */
-    public function post($data = [], $uri = null)
+    public function post(array $data = [], $uri = null)
     {
         return $this->query('post', $data, $uri);
     }
@@ -500,7 +501,7 @@ class EasyCurl
      * @return mixed
      */
 
-    public function put($data = [], $uri = null)
+    public function put(array $data = [], $uri = null)
     {
         return $this->query('put', $data, $uri);
     }
@@ -514,7 +515,7 @@ class EasyCurl
      * @return mixed
      */
 
-    public function delete($data = [], $uri = null)
+    public function delete(array $data = [], $uri = null)
     {
         return $this->query('delete', $data, $uri);
     }
@@ -527,7 +528,8 @@ class EasyCurl
      *
      * @return integer
      */
-    private function headerCallback(/** @noinspection PhpUnusedParameterInspection */ $ch, $header)
+    private function headerCallback(/** @noinspection PhpUnusedParameterInspection */
+        $ch, $header)
     {
         $this->rawResponseHeaders .= $header;
         return strlen($header);

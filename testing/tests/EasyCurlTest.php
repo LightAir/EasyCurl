@@ -4,37 +4,37 @@ use LightAir\EasyCurl\EasyCurl;
 
 class EasyCurlTest extends PHPUnit_Framework_TestCase
 {
-	const URL = 'http://localhost:3351';
+    const URL = 'http://localhost:3351';
 
-	public function setUp()
-	{
-	    parent::setUp();
+    public function setUp()
+    {
+        parent::setUp();
 
-		if (!getenv('CURL_TEST_SERVER_RUNNING')) {
-			$this->markTestSkipped('The web server is not running.');
-		}
+        if (!getenv('CURL_TEST_SERVER_RUNNING')) {
+            $this->markTestSkipped('The web server is not running.');
+        }
 
-		if (!extension_loaded('curl')) {
-			$this->markTestSkipped('The curl extension is not installed.');
-		}
-	}
+        if (!extension_loaded('curl')) {
+            $this->markTestSkipped('The curl extension is not installed.');
+        }
+    }
 
     /** @test */
-	public function successfulResponse()
-	{
+    public function successfulResponse()
+    {
         $ecu = new EasyCurl(static::URL . '/success.php');
 
         $result = $ecu->get();
 
-		$this->assertEquals(200, $ecu->getHttpStatusCode());
-		$this->assertEquals('OK', $result);
-		$this->assertNotNull($ecu->getRawResponseHeaders());
-		$this->assertNotNull($ecu->getResponseHeaders());
-	}
+        $this->assertEquals(200, $ecu->getHttpStatusCode());
+        $this->assertEquals('OK', $result);
+        $this->assertNotNull($ecu->getRawResponseHeaders());
+        $this->assertNotNull($ecu->getResponseHeaders());
+    }
 
     /** @test */
-	public function failedResponse()
-	{
+    public function failedResponse()
+    {
         $ecu = new EasyCurl(static::URL . '/failure.php');
 
         $result = $ecu->get();
@@ -45,21 +45,21 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Failure', $result);
         $this->assertEquals('HTTP/1.1 500 Internal Server Error', $ecu->getHttpErrorMessage());
         $this->assertNotNull($ecu->getRawResponseHeaders());
-	}
+    }
 
     /** @test */
-	public function queryRequestBody()
-	{
+    public function queryRequestBody()
+    {
         $ecu = new EasyCurl(static::URL . '/echo.php');
 
-        $result = $ecu->query('post',['foo' => 'bar']);
+        $result = $ecu->query('post', ['foo' => 'bar']);
 
         $this->assertRegExp('/foo=bar/', $result);
-	}
+    }
 
-	/** @test */
-	public function curlError()
-	{
+    /** @test */
+    public function curlError()
+    {
         $ecu = new EasyCurl('httpg://0.0.0.0.0.0');
         $ecu->get();
 
@@ -68,7 +68,7 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $ecu->getCurlErrorCode());
         $this->assertRegExp('/not supported or disabled in libcurl/', $ecu->getCurlErrorMessage());
 
-	}
+    }
 
     /** @test */
     public function checkUserAgent()
@@ -80,7 +80,7 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
         $result = $ecu->post();
         $this->assertRegExp('/User-Agent: unit test/', $result);
 
-	}
+    }
 
     /** @test */
     public function checkBasicAuth()
