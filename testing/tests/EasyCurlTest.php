@@ -58,6 +58,16 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function queryRequestBodyWithUri()
+    {
+        $ecu = new EasyCurl(static::URL . '/echo.php');
+
+        $result = $ecu->query('post', ['foo' => 'bar'], static::URL . '/echo.php');
+
+        $this->assertRegExp('/foo=bar/', $result);
+    }
+
+    /** @test */
     public function curlError()
     {
         $ecu = new EasyCurl('httpg://0.0.0.0.0.0');
