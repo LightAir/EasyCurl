@@ -368,13 +368,13 @@ class EasyCurl
         if ($method === 'GET') {
             $this->setOpt(CURLOPT_HTTPGET, true);
             $this->setOpt(CURLOPT_URL, $this->uri . '?' . http_build_query($data));
-        } else {
-            $this->setOpt(CURLOPT_POST, true);
-            $this->setOpt(CURLOPT_POSTFIELDS, http_build_query($data));
+            return $this->exec();
         }
 
-        return $this->exec();
+        $this->setOpt(CURLOPT_POST, true);
+        $this->setOpt(CURLOPT_POSTFIELDS, http_build_query($data));
 
+        return $this->exec();
     }
 
     /**
@@ -453,12 +453,11 @@ class EasyCurl
         foreach (explode("\r\n", $headerLine) as $i => $line) {
             if ($i === 0) {
                 $headers['Status-Line'] = $line;
+                continue;
             }
-            else {
-                list ($key, $value) = explode(': ', $line);
 
-                $headers[$key] = $value;
-            }
+            list ($key, $value) = explode(': ', $line);
+            $headers[$key] = $value;
         }
 
         return $headers;
