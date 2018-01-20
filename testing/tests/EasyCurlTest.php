@@ -179,4 +179,22 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, time() - $startTime);
         $this->assertTrue($ecu->isError());
     }
+
+
+    /** @test */
+    public function checkJsonDecode()
+    {
+        $ecu = new EasyCurl(static::URL . '/json.php');
+        $ecu->setAutoJSONDecode(true);
+
+        $this->assertTrue($ecu->isAutoJSONDecode());
+
+        $result = $ecu->query();
+
+        $this->assertEquals([
+                "test" => "json"
+            ],
+            $result
+        );
+    }
 }

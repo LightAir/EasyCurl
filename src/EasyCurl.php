@@ -80,6 +80,8 @@ class EasyCurl
     private $httpStatusCode = 0;
     private $httpErrorMessage;
 
+    private $autoJSONDecode = false;
+
     /**
      * Request constructor.
      *
@@ -91,6 +93,26 @@ class EasyCurl
             $this->uri = $uri;
             $this->curl = curl_init($uri);
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAutoJSONDecode()
+    {
+        return $this->autoJSONDecode;
+    }
+
+    /**
+     * @param $autoJSONDecode
+     *
+     * @return $this
+     */
+    public function setAutoJSONDecode($autoJSONDecode)
+    {
+        $this->autoJSONDecode = $autoJSONDecode;
+
+        return $this;
     }
 
     /**
@@ -409,6 +431,10 @@ class EasyCurl
             $this->httpErrorMessage = $this->responseHeaders['Status-Line'];
         }
 
+        if ($this->autoJSONDecode && $this->isJSON($this->response)) {
+            return json_decode($this->response, true);
+        }
+
         return $this->response;
     }
 
@@ -433,7 +459,6 @@ class EasyCurl
             $this->setOpt(CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
             $this->setOpt(CURLOPT_USERPWD, $this->login . ':' . $this->password);
         }
-
     }
 
     /**
@@ -532,5 +557,20 @@ class EasyCurl
     {
         $this->rawResponseHeaders .= $header;
         return strlen($header);
+    }
+
+    /**
+     * Check string is JSON
+     *
+     * @param $string
+     *
+     * @return bool
+     */
+    public function isJSON($string)
+    {
+        return
+            is_array(json_decode($string, true)) &&
+            is_string($string) &&
+            (json_last_error() === JSON_ERROR_NONE);
     }
 }
