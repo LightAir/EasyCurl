@@ -80,7 +80,7 @@ class EasyCurl
     private $httpStatusCode = 0;
     private $httpErrorMessage;
 
-    private $autoJSONDecode = false;
+    private $autoJSON = false;
 
     /**
      * Request constructor.
@@ -98,9 +98,9 @@ class EasyCurl
     /**
      * @return bool
      */
-    public function isAutoJSONDecode()
+    public function isAutoJSON()
     {
-        return $this->autoJSONDecode;
+        return $this->autoJSON;
     }
 
     /**
@@ -108,9 +108,9 @@ class EasyCurl
      *
      * @return $this
      */
-    public function setAutoJSONDecode($autoJSONDecode)
+    public function setAutoJSON($autoJSON)
     {
-        $this->autoJSONDecode = $autoJSONDecode;
+        $this->autoJSON = $autoJSON;
 
         return $this;
     }
@@ -395,7 +395,7 @@ class EasyCurl
 
         $this->setOpt(CURLOPT_POST, true);
 
-        if ($this->isAutoJSONDecode()) {
+        if ($this->isAutoJSON()) {
             $dataJson = json_encode($data);
 
             $this->setOpt(
@@ -447,7 +447,7 @@ class EasyCurl
             $this->httpErrorMessage = $this->responseHeaders['Status-Line'];
         }
 
-        if ($this->autoJSONDecode && $this->isJSON($this->response)) {
+        if ($this->autoJSON && $this->isJSON($this->response)) {
             return json_decode($this->response, true);
         }
 

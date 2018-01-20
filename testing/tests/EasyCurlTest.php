@@ -184,9 +184,9 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
     public function checkJsonDecode()
     {
         $ecu = new EasyCurl(static::URL . '/json.php');
-        $ecu->setAutoJSONDecode(true);
+        $ecu->setAutoJSON(true);
 
-        $this->assertTrue($ecu->isAutoJSONDecode());
+        $this->assertTrue($ecu->isAutoJSON());
 
         $result = $ecu->query();
 
@@ -201,9 +201,9 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
     public function checkJsonEncode()
     {
         $ecu = new EasyCurl(static::URL . '/echo.php');
-        $ecu->setAutoJSONDecode(true);
+        $ecu->setAutoJSON(true);
 
-        $this->assertTrue($ecu->isAutoJSONDecode());
+        $this->assertTrue($ecu->isAutoJSON());
 
         $result = $ecu->query('POST', ['hello' => 'world']);
 
