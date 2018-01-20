@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Service Provider for Lumen Framework
+ * Service Provider for Laravel & Lumen Frameworks
  *
  * @package EasyCurl
  *
@@ -29,5 +29,17 @@ class EasyCurlServiceProvider extends ServiceProvider
                 ->setProxy($this->app['config']['ecurl.proxy'])
                 ->setUserAgent($this->app['config']['ecurl.userAgent']);
         });
+    }
+
+    protected function setupConfig()
+    {
+        $source = dirname(__DIR__) . '/src/ecurl.php';
+
+        if ($this->app instanceof LaravelApplication) {
+            $this->publishes([$source => config_path('ecurl.php')]);
+        } elseif ($this->app instanceof LumenApplication) {
+            $this->app->configure('ecurl');
+        }
+        $this->mergeConfigFrom($source, 'ecurl');
     }
 }
