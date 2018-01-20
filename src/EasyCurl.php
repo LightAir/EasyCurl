@@ -394,6 +394,22 @@ class EasyCurl
         }
 
         $this->setOpt(CURLOPT_POST, true);
+
+        if ($this->isAutoJSONDecode()) {
+            $dataJson = json_encode($data);
+
+            $this->setOpt(
+                CURLOPT_HTTPHEADER,
+                [
+                    'Content-Type: application/json',
+                    'Content-Length: ' . strlen($dataJson)
+                ]);
+
+            $this->setOpt(CURLOPT_POSTFIELDS, $dataJson);
+
+            return $this->exec();
+        }
+
         $this->setOpt(CURLOPT_POSTFIELDS, http_build_query($data));
 
         return $this->exec();

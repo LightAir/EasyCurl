@@ -180,7 +180,6 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($ecu->isError());
     }
 
-
     /** @test */
     public function checkJsonDecode()
     {
@@ -196,5 +195,18 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
             ],
             $result
         );
+    }
+
+    /** @test */
+    public function checkJsonEncode()
+    {
+        $ecu = new EasyCurl(static::URL . '/echo.php');
+        $ecu->setAutoJSONDecode(true);
+
+        $this->assertTrue($ecu->isAutoJSONDecode());
+
+        $result = $ecu->query('POST', ['hello' => 'world']);
+
+        $this->assertRegExp('{"hello":"world"}', $result);
     }
 }
