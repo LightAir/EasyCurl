@@ -1,6 +1,6 @@
 <?php
 /**
- * Base Class
+ * Example Class
  */
 
 namespace LightAir\Examples;
@@ -14,7 +14,7 @@ class ReSmush
     {
         $eCurl = new EasyCurl('http://api.resmush.it/ws.php');
 
-        dump(
+        var_dump(
             json_decode(
                 $eCurl->get()
             ),
@@ -26,11 +26,11 @@ class ReSmush
     {
         $eCurl = new EasyCurl('http://api.resmush.it/ws.php');
 
-        dump(
+        var_dump(
             json_decode(
                 $eCurl->get(
                     [
-                        'img' => 'https://softroot.ru/pictures/cup.png'
+                        'img' => 'https://softroot.ru/static/e16f9dccf792794dbe39f3c76864ff34/b4295/alen-jacob-wdxb9OOMQOs-unsplash.jpg'
                     ]
                 )
             ),
@@ -43,11 +43,11 @@ class ReSmush
     {
         $eCurl = new EasyCurl('http://api.resmush.it/ws.php');
 
-        dump(
+        var_dump(
             json_decode(
                 $eCurl->post(
                     [
-                        'img' => 'https://softroot.ru/pictures/cup.png'
+                        'img' => 'https://softroot.ru/static/e16f9dccf792794dbe39f3c76864ff34/b4295/alen-jacob-wdxb9OOMQOs-unsplash.jpg'
                     ]
                 )
             ),

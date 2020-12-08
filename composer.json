@@ -23,10 +23,11 @@
       "issues": "https://github.com/LightAir/EasyCurl/issues"
   },
   "require": {
-    "php": ">=5.6.0"
+    "php": ">=5.6.0",
+    "ext-curl": "*",
+    "ext-json": "*"
   },
   "require-dev": {
-    "laravel/lumen-framework": "5.1.*",
     "phpunit/phpunit": "^5.6"
   },
   "autoload": {

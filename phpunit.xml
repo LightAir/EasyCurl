@@ -18,6 +18,10 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>
+            <exclude>
+                <file>./src/EasyCurlFacade.php</file>
+                <file>./src/EasyCurlServiceProvider.php</file>
+            </exclude>
         </whitelist>
     </filter>
     <testsuites>

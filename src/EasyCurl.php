@@ -13,73 +13,61 @@ namespace LightAir\EasyCurl;
 class EasyCurl
 {
 
-    /**
-     * Headers
-     *
-     * @var array
-     */
+    /** @var array */
     private $headers = [];
 
-    /**
-     * URI Request
-     *
-     * @var string
-     */
+    /** @var string */
     private $uri;
 
-    /**
-     * Proxy address
-     *
-     * @var string
-     */
+    /** @var string|null */
     private $proxy;
 
-    /**
-     * User Agent
-     *
-     * @var string
-     */
+    /** @var string */
     private $userAgent = 'Curl PHP';
 
-    /**
-     * Login for Basic Authorization
-     *
-     * @var string
-     */
+    /** @var string|null */
     private $login;
 
-    /**
-     * Password for Basic Authorization
-     *
-     * @var string
-     */
+    /** @var string|null */
     private $password;
 
-    /**
-     * Time Out
-     *
-     * @var int
-     */
+    /** @var int */
     private $timeOut = 10;
 
+    /** @var \CurlHandle|false|resource */
     private $curl;
-    private $options;
 
-    private $response;
+    /** @var array|null */
     private $responseHeaders;
+
+    /** @var string|null */
     private $rawResponseHeaders;
 
+    /** @var bool */
     private $error = false;
 
+    /** @var bool */
     private $curlError = false;
+
+    /** @var int */
     private $curlErrorCode = 0;
+
+    /** @var string|null */
     private $curlErrorMessage;
 
+    /** @var bool */
     private $httpError = false;
+
+    /** @var int */
     private $httpErrorCode = 0;
+
+    /** @var int */
     private $httpStatusCode = 0;
+
+    /** @var string|null */
     private $httpErrorMessage;
 
+    /** @var bool */
     private $autoJSON = false;
 
     /**
@@ -108,9 +96,9 @@ class EasyCurl
      *
      * @return $this
      */
-    public function setAutoJSON($autoJSON)
+    public function setAutoJSON($autoJSONDecode)
     {
-        $this->autoJSON = $autoJSON;
+        $this->autoJSON = $autoJSONDecode;
 
         return $this;
     }
@@ -349,7 +337,7 @@ class EasyCurl
      */
     public function setOpt($option, $value)
     {
-        $this->options[$option] = $value;
+        $options[$option] = $value;
         return curl_setopt($this->curl, $option, $value);
     }
 
@@ -424,7 +412,7 @@ class EasyCurl
     {
         $this->buildQuery();
 
-        $this->response = curl_exec($this->curl);
+        $response = curl_exec($this->curl);
 
         // curl
         $this->curlErrorCode = curl_errno($this->curl);
@@ -447,11 +435,11 @@ class EasyCurl
             $this->httpErrorMessage = $this->responseHeaders['Status-Line'];
         }
 
-        if ($this->autoJSON && $this->isJSON($this->response)) {
-            return json_decode($this->response, true);
+        if ($this->autoJSON && $this->isJSON($response)) {
+            return json_decode($response, true);
         }
 
-        return $this->response;
+        return $response;
     }
 
     /**
