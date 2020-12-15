@@ -332,7 +332,6 @@ class EasyCurl
      */
     public function setOpt($option, $value): bool
     {
-        $options[$option] = $value;
         return curl_setopt($this->curl, $option, $value);
     }
 
@@ -454,7 +453,11 @@ class EasyCurl
         $this->setOpt(CURLOPT_USERAGENT, $this->userAgent);
         $this->setOpt(CURLOPT_CONNECTTIMEOUT, $this->timeOut);
         $this->setOpt(CURLINFO_HEADER_OUT, true);
-        $this->setOpt(CURLOPT_HEADERFUNCTION, array($this, 'headerCallback'));
+        $this->setOpt(CURLOPT_HEADERFUNCTION, function($resource, $header) {
+                $this->rawResponseHeaders .= $header;
+                return strlen($header);
+            }
+        );
 
         if (null !== $this->login && null !== $this->password) {
             $this->setOpt(CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
@@ -472,7 +475,7 @@ class EasyCurl
     private function headerParse(string $rawHeader): array
     {
 
-        $headers = array();
+        $headers = [];
 
         $headerLine = substr($rawHeader, 0, strpos($rawHeader, "\r\n\r\n"));
 
@@ -551,21 +554,6 @@ class EasyCurl
     public function delete(array $data = [], $uri = null)
     {
         return $this->query('delete', $data, $uri);
-    }
-
-    /**
-     * Header Callback
-     *
-     * @param  $ch
-     * @param  $header
-     *
-     * @return int
-     */
-    private function headerCallback(/** @noinspection PhpUnusedParameterInspection */
-        $ch, $header)
-    {
-        $this->rawResponseHeaders .= $header;
-        return strlen($header);
     }
 
     /**
