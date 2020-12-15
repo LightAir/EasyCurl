@@ -4,10 +4,6 @@
     <include>
       <directory suffix=".php">./src</directory>
     </include>
-    <exclude>
-      <file>./src/EasyCurlFacade.php</file>
-      <file>./src/EasyCurlServiceProvider.php</file>
-    </exclude>
   </coverage>
   <testsuites>
     <testsuite name="Application Test Suite">

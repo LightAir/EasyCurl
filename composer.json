@@ -5,9 +5,7 @@
     "curl",
     "easycurl",
     "http",
-    "request",
-    "laravel",
-    "lumen"
+    "request"
   ],
   "type": "library",
   "license": "MIT",
@@ -31,8 +29,6 @@
     "phpunit/phpunit": "^9.5"
   },
   "autoload": {
-    "psr-4": {
-      "LightAir\\EasyCurl\\": "src/"
-    }
+    "classmap": ["src/"]
   }
 }

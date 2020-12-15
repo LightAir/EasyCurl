@@ -1,6 +1,6 @@
 <?php
 
-use LightAir\EasyCurl\EasyCurl;
+use LightAir\Utils\EasyCurl;
 
 /**
  * Example usage

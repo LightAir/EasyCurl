@@ -2,7 +2,7 @@
 
 namespace tests;
 
-use LightAir\EasyCurl\EasyCurl;
+use LightAir\Utils\EasyCurl;
 use PHPUnit\Framework\TestCase;
 
 class EasyCurlTest extends TestCase

@@ -1,6 +1,6 @@
 <?php
 
-namespace LightAir\EasyCurl;
+namespace LightAir\Utils;
 
 use Exception;
 

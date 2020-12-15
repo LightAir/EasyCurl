@@ -1,8 +1,6 @@
 <?php
 
-namespace LightAir\EasyCurl;
-
-use CurlHandle;
+namespace LightAir\Utils;
 
 /**
  * A basic CURL wrapper for PHP
@@ -11,7 +9,6 @@ use CurlHandle;
  */
 class EasyCurl
 {
-
     /** @var array */
     private array $headers = [];
 
@@ -33,7 +30,7 @@ class EasyCurl
     /** @var int */
     private int $timeOut = 10;
 
-    /** @var CurlHandle|false|resource */
+    /** @var \CurlHandle|false|resource */
     private $curl;
 
     /** @var array|null */
