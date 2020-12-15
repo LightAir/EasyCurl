@@ -16,26 +16,14 @@ composer require lightair/easycurl
 
 ## Как использовать на чистом PHP
 ```php
-use LightAir\EasyCurl\EasyCurl;
+use LightAir\Utils\EasyCurl;
 
 $easyCurl = new EasyCurl('http://yandex.ru');
 $result = $easyCurl->get();
 ```
 
-## Как использовать в Lumen
-Для начала в файле bootstrap/app.php раскомментируйте ```$app->withFacades();``` и добавьте:
-```php
-$app->register(LightAir\EasyCurl\EasyCurlServiceProvider::class);
-
-if (!class_exists('ECurl')) {
-    class_alias(LightAir\EasyCurl\EasyCurlFacade::class, 'ECurl');
-}
-```
-Далее где необходимо
-```php
-$result = \ECurl::get([], 'http://yandex.ru');
-dd($result, \ECurl::getHttpStatusCode());
-```
+## Lumen и Laravel
+Больше не поддерживается
 
 ## Запуск тестов
 ```shell

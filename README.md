@@ -2,7 +2,7 @@
     <img src="https://raw.githubusercontent.com/LightAir/EasyCurl/master/art/ec.png" alt="EasyCurl"/>
 </p>
 
-EasyCurl, it a easy CURL wrapper for PHP.
+EasyCurl, its easy CURL wrapper for PHP.
 
 [![Build Status](https://travis-ci.com/LightAir/EasyCurl.svg?branch=master)](https://travis-ci.com/LightAir/EasyCurl)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/LightAir/EasyCurl)
@@ -14,62 +14,17 @@ EasyCurl, it a easy CURL wrapper for PHP.
 composer require lightair/easycurl
 ```
 
-## How to use (PHP)
+## How to use
 ```php
-use LightAir\EasyCurl\EasyCurl;
+use LightAir\Utils\EasyCurl;
 
 $easyCurl = new EasyCurl('http://yandex.ru');
 $result = $easyCurl->get();
 ```
 
-## How to use (With Lumen)
-In file bootstrap/app.php uncomment ```$app->withFacades();``` and add:
-```php
-$app->register(LightAir\EasyCurl\EasyCurlServiceProvider::class);
+## Lumen and Laravel
+No longer supported
 
-if (!class_exists('ECurl')) {
-    class_alias(LightAir\EasyCurl\EasyCurlFacade::class, 'ECurl');
-}
-```
-
-```php
-$result = \ECurl::get([], 'http://yandex.ru');
-dd($result, \ECurl::getHttpStatusCode());
-```
-
-## How to use (With Laravel)
-
-
-Register the service provider.
-
-```php
-'providers' => [
-    // Other service providers...
-    LightAir\EasyCurl\EasyCurlServiceProvider::class
-],
-```
-
-Add aliase
-
-```php
-'providers' => [
-    // Other aliases...
-    'ECurl' => \LightAir\EasyCurl\EasyCurlFacade::class,
-],
-```
-
-Publish the config file
-
-```php
-php artisan vendor:publish --provider="LightAir\EasyCurl\EasyCurlServiceProvider"
-```
-
-And use
-
-```php
-$result = ECurl::get([], 'http://yandex.ru');
-dd($result, ECurl::getHttpStatusCode());
-```
 ## Run tests
 ```shell
 ./tests-run.sh
