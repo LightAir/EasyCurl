@@ -12,8 +12,8 @@ class EasyCurl
     /** @var array */
     private array $headers = [];
 
-    /** @var string */
-    private string $uri;
+    /** @var null|string */
+    private ?string $uri = null;
 
     /** @var string|null */
     private ?string $proxy = null;
@@ -361,7 +361,7 @@ class EasyCurl
         }
 
         if ($this->uri === null) {
-            throw new EasyCurlException();
+            throw new EasyCurlException('Uri not set');
         }
 
         $method = strtoupper($method);

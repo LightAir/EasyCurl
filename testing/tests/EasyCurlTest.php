@@ -3,6 +3,7 @@
 namespace tests;
 
 use LightAir\Utils\EasyCurl;
+use LightAir\Utils\EasyCurlException;
 use PHPUnit\Framework\TestCase;
 
 class EasyCurlTest extends TestCase
@@ -211,5 +212,30 @@ class EasyCurlTest extends TestCase
         $result = $ecu->query('POST', ['hello' => 'world']);
 
         $this->assertMatchesRegularExpression('{"hello":"world"}', $result);
+    }
+
+    /** @test */
+    public function setUrlWithQuery()
+    {
+        $ecu = new EasyCurl();
+
+        $result = $ecu->get([],static::URL . '/success.php');
+
+        $this->assertEquals(200, $ecu->getHttpStatusCode());
+        $this->assertEquals('OK', $result);
+        $this->assertNotNull($ecu->getRawResponseHeaders());
+        $this->assertNotNull($ecu->getResponseHeaders());
+    }
+
+    /** @test */
+    public function throwIsUrlNotSet()
+    {
+        $ecu = new EasyCurl();
+
+        try {
+            $ecu->get();
+        } catch (EasyCurlException $exception) {
+            $this->assertEquals($exception->getMessage(), 'Uri not set');
+        }
     }
 }
