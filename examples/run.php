@@ -2,7 +2,7 @@
 
 $loader = require __DIR__ . '/../vendor/autoload.php';
 
-use LightAir\Examples\ReSmush;
+require_once 'ReSmush.php';
 
 $example = new ReSmush();
 $example->baseGet();

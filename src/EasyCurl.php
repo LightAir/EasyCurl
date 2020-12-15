@@ -1,74 +1,73 @@
 <?php
 
+namespace LightAir\EasyCurl;
+
+use CurlHandle;
+
 /**
  * A basic CURL wrapper for PHP
  *
- * @package EasyCurl
- *
- * @author LightAir
+ * @package LightAir\EasyCurl
  */
-
-namespace LightAir\EasyCurl;
-
 class EasyCurl
 {
 
     /** @var array */
-    private $headers = [];
+    private array $headers = [];
 
     /** @var string */
-    private $uri;
+    private string $uri;
 
     /** @var string|null */
-    private $proxy;
+    private ?string $proxy = null;
 
     /** @var string */
-    private $userAgent = 'Curl PHP';
+    private string $userAgent = 'Curl PHP';
 
     /** @var string|null */
-    private $login;
+    private ?string $login = null;
 
     /** @var string|null */
-    private $password;
+    private ?string $password;
 
     /** @var int */
-    private $timeOut = 10;
+    private int $timeOut = 10;
 
-    /** @var \CurlHandle|false|resource */
+    /** @var CurlHandle|false|resource */
     private $curl;
 
     /** @var array|null */
-    private $responseHeaders;
+    private ?array $responseHeaders;
 
     /** @var string|null */
-    private $rawResponseHeaders;
+    private ?string $rawResponseHeaders = null;
 
     /** @var bool */
-    private $error = false;
+    private bool $error = false;
 
     /** @var bool */
-    private $curlError = false;
+    private bool $curlError = false;
 
     /** @var int */
-    private $curlErrorCode = 0;
+    private int $curlErrorCode = 0;
 
     /** @var string|null */
-    private $curlErrorMessage;
+    private ?string $curlErrorMessage;
 
     /** @var bool */
-    private $httpError = false;
+    private bool $httpError = false;
 
     /** @var int */
-    private $httpErrorCode = 0;
+    private int $httpErrorCode = 0;
 
     /** @var int */
-    private $httpStatusCode = 0;
+    private int $httpStatusCode = 0;
 
     /** @var string|null */
-    private $httpErrorMessage;
+    private ?string $httpErrorMessage;
 
     /** @var bool */
-    private $autoJSON = false;
+    private bool $autoJSON = false;
 
     /**
      * Request constructor.
@@ -86,7 +85,7 @@ class EasyCurl
     /**
      * @return bool
      */
-    public function isAutoJSON()
+    public function isAutoJSON(): bool
     {
         return $this->autoJSON;
     }
@@ -96,7 +95,7 @@ class EasyCurl
      *
      * @return $this
      */
-    public function setAutoJSON($autoJSONDecode)
+    public function setAutoJSON(bool $autoJSONDecode): EasyCurl
     {
         $this->autoJSON = $autoJSONDecode;
 
@@ -104,33 +103,33 @@ class EasyCurl
     }
 
     /**
-     * @return mixed
+     * @return array|null
      */
-    public function getResponseHeaders()
+    public function getResponseHeaders(): ?array
     {
         return $this->responseHeaders;
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
-    public function getRawResponseHeaders()
+    public function getRawResponseHeaders(): ?string
     {
         return $this->rawResponseHeaders;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function isError()
+    public function isError(): bool
     {
         return $this->error;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function isCurlError()
+    public function isCurlError(): bool
     {
         return $this->curlError;
     }
@@ -138,23 +137,23 @@ class EasyCurl
     /**
      * @return int
      */
-    public function getCurlErrorCode()
+    public function getCurlErrorCode(): int
     {
         return $this->curlErrorCode;
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
-    public function getCurlErrorMessage()
+    public function getCurlErrorMessage(): ?string
     {
         return $this->curlErrorMessage;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function isHttpError()
+    public function isHttpError(): bool
     {
         return $this->httpError;
     }
@@ -162,7 +161,7 @@ class EasyCurl
     /**
      * @return int
      */
-    public function getHttpErrorCode()
+    public function getHttpErrorCode(): int
     {
         return $this->httpErrorCode;
     }
@@ -170,15 +169,15 @@ class EasyCurl
     /**
      * @return int
      */
-    public function getHttpStatusCode()
+    public function getHttpStatusCode(): int
     {
         return $this->httpStatusCode;
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
-    public function getHttpErrorMessage()
+    public function getHttpErrorMessage(): ?string
     {
         return $this->httpErrorMessage;
     }
@@ -188,9 +187,9 @@ class EasyCurl
      *
      * @param string $proxy
      *
-     * @return $this
+     * @return EasyCurl
      */
-    public function setProxy($proxy)
+    public function setProxy(string $proxy): EasyCurl
     {
         $this->proxy = $proxy;
 
@@ -200,11 +199,11 @@ class EasyCurl
     /**
      * Setter User Agent
      *
-     * @param $userAgent
+     * @param string $userAgent
      *
-     * @return $this
+     * @return EasyCurl
      */
-    public function setUserAgent($userAgent)
+    public function setUserAgent(string $userAgent): EasyCurl
     {
         $this->userAgent = $userAgent;
 
@@ -214,11 +213,11 @@ class EasyCurl
     /**
      * Login setter for Basic Authorization
      *
-     * @param $login
+     * @param string $login
      *
-     * @return $this
+     * @return EasyCurl
      */
-    public function setLogin($login)
+    public function setLogin(string $login): EasyCurl
     {
         $this->login = $login;
 
@@ -228,11 +227,11 @@ class EasyCurl
     /**
      * Password setter for Basic Authorization
      *
-     * @param $password
+     * @param string $password
      *
-     * @return $this
+     * @return EasyCurl
      */
-    public function setPassword($password)
+    public function setPassword(string $password): EasyCurl
     {
         $this->password = $password;
 
@@ -244,9 +243,9 @@ class EasyCurl
      *
      * @param int $timeOut
      *
-     * @return $this
+     * @return EasyCurl
      */
-    public function setTimeOut($timeOut)
+    public function setTimeOut(int $timeOut): EasyCurl
     {
         $this->timeOut = $timeOut;
 
@@ -258,9 +257,9 @@ class EasyCurl
      *
      * @param string $type
      *
-     * @return $this
+     * @return EasyCurl
      */
-    public function changeContentType($type)
+    public function changeContentType(string $type): EasyCurl
     {
 
         $mime = [
@@ -280,17 +279,16 @@ class EasyCurl
         }
 
         return $this;
-
     }
 
     /**
      * Unset header
      *
-     * @param $headerName
+     * @param string $headerName
      *
-     * @return $this
+     * @return EasyCurl
      */
-    public function unsetHeader($headerName)
+    public function unsetHeader(string $headerName): EasyCurl
     {
         $this->setHeader($headerName, '');
         unset($this->headers[$headerName]);
@@ -304,9 +302,9 @@ class EasyCurl
      * @param string $headerName
      * @param string $headerValue
      *
-     * @return $this
+     * @return EasyCurl
      */
-    public function setHeader($headerName, $headerValue)
+    public function setHeader(string $headerName, string $headerValue): EasyCurl
     {
         $this->headers[$headerName] = $headerValue;
 
@@ -316,11 +314,11 @@ class EasyCurl
             $headers[$key] = $value;
         }
 
-        $callback = function ($aval, $akey) {
-            return $akey . ': ' . $aval;
-        };
-
-        $finishedHeaders = array_map($callback, $headers, array_keys($headers));
+        $finishedHeaders = array_map(
+            fn($aval, $akey) => $akey . ': ' . $aval,
+            $headers,
+            array_keys($headers)
+        );
 
         $this->setOpt(CURLOPT_HTTPHEADER, $finishedHeaders);
 
@@ -333,9 +331,9 @@ class EasyCurl
      * @param  mixed $option
      * @param  mixed $value
      *
-     * @return boolean
+     * @return bool
      */
-    public function setOpt($option, $value)
+    public function setOpt($option, $value): bool
     {
         $options[$option] = $value;
         return curl_setopt($this->curl, $option, $value);
@@ -346,11 +344,13 @@ class EasyCurl
      *
      * @param string $method
      * @param array $data
-     * @param string $uri
+     * @param string|null $uri
      *
-     * @return mixed
+     * @return bool|string
+     *
+     * @throws EasyCurlException
      */
-    public function query($method = 'get', array $data = [], $uri = null)
+    public function query(string $method = 'get', array $data = [], ?string $uri = null)
     {
 
         if (null !== $uri) {
@@ -363,11 +363,11 @@ class EasyCurl
             $this->curl = curl_init($uri);
         }
 
-        $method = strtoupper($method);
-
-        if (!in_array($method, ['GET', 'POST', 'PUT', 'DELETE'], true)) {
-            $method = 'GET';
+        if ($this->uri === null) {
+            throw new EasyCurlException();
         }
+
+        $method = strtoupper($method);
 
         if (is_array($data) && empty($data)) {
             $this->unsetHeader('Content-Length');
@@ -406,7 +406,7 @@ class EasyCurl
     /**
      * Execution request
      *
-     * @return mixed
+     * @return bool|string
      */
     private function exec()
     {
@@ -435,7 +435,7 @@ class EasyCurl
             $this->httpErrorMessage = $this->responseHeaders['Status-Line'];
         }
 
-        if ($this->autoJSON && $this->isJSON($response)) {
+        if ($this->autoJSON && $response !== false && $this->isJSON($response)) {
             return json_decode($response, true);
         }
 
@@ -447,7 +447,7 @@ class EasyCurl
      *
      * Build query
      */
-    public function buildQuery()
+    public function buildQuery(): void
     {
         if ($this->proxy) {
             $this->setOpt(CURLOPT_PROXY, $this->proxy);
@@ -468,11 +468,11 @@ class EasyCurl
     /**
      * Parser for headers
      *
-     * @param $rawHeader
+     * @param string $rawHeader
      *
      * @return array
      */
-    private function headerParse($rawHeader)
+    private function headerParse(string $rawHeader): array
     {
 
         $headers = array();
@@ -496,12 +496,14 @@ class EasyCurl
      * Performs get request
      *
      * @param array $data
-     * @param string $uri
+     * @param string|null $uri
      *
-     * @return mixed
+     * @return bool|string
+     *
+     * @throws EasyCurlException
      */
 
-    public function get(array $data = [], $uri = null)
+    public function get(array $data = [], string $uri = null)
     {
         return $this->query('get', $data, $uri);
     }
@@ -512,7 +514,9 @@ class EasyCurl
      * @param array $data
      * @param string $uri
      *
-     * @return mixed
+     * @return bool|string
+     *
+     * @throws EasyCurlException
      */
     public function post(array $data = [], $uri = null)
     {
@@ -526,7 +530,9 @@ class EasyCurl
      * @param array $data
      * @param string $uri
      *
-     * @return mixed
+     * @return bool|string
+     *
+     * @throws EasyCurlException
      */
 
     public function put(array $data = [], $uri = null)
@@ -540,7 +546,9 @@ class EasyCurl
      * @param array $data
      * @param string $uri
      *
-     * @return mixed
+     * @return bool|string
+     *
+     * @throws EasyCurlException
      */
 
     public function delete(array $data = [], $uri = null)
@@ -554,7 +562,7 @@ class EasyCurl
      * @param  $ch
      * @param  $header
      *
-     * @return integer
+     * @return int
      */
     private function headerCallback(/** @noinspection PhpUnusedParameterInspection */
         $ch, $header)
@@ -566,15 +574,12 @@ class EasyCurl
     /**
      * Check string is JSON
      *
-     * @param $string
+     * @param string $string
      *
      * @return bool
      */
-    public function isJSON($string)
+    public function isJSON(string $string): bool
     {
-        return
-            is_array(json_decode($string, true)) &&
-            is_string($string) &&
-            (json_last_error() === JSON_ERROR_NONE);
+        return is_array(json_decode($string, true)) && (json_last_error() === JSON_ERROR_NONE);
     }
 }

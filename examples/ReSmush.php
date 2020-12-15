@@ -1,16 +1,16 @@
 <?php
-/**
- * Example Class
- */
-
-namespace LightAir\Examples;
 
 use LightAir\EasyCurl\EasyCurl;
 
+/**
+ * Example usage
+ */
 class ReSmush
 {
-
-    public function baseGet()
+    /**
+     * @return void
+     */
+    public function baseGet(): void
     {
         $eCurl = new EasyCurl('http://api.resmush.it/ws.php');
 
@@ -22,7 +22,10 @@ class ReSmush
         );
     }
 
-    public function sendImageGet()
+    /**
+     * @return void
+     */
+    public function sendImageGet(): void
     {
         $eCurl = new EasyCurl('http://api.resmush.it/ws.php');
 
@@ -39,7 +42,10 @@ class ReSmush
         );
     }
 
-    public function sendImagePost()
+    /**
+     * @return void
+     */
+    public function sendImagePost(): void
     {
         $eCurl = new EasyCurl('http://api.resmush.it/ws.php');
 

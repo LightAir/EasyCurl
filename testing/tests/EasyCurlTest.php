@@ -1,12 +1,15 @@
 <?php
 
-use LightAir\EasyCurl\EasyCurl;
+namespace tests;
 
-class EasyCurlTest extends PHPUnit_Framework_TestCase
+use LightAir\EasyCurl\EasyCurl;
+use PHPUnit\Framework\TestCase;
+
+class EasyCurlTest extends TestCase
 {
     const URL = 'http://localhost:3351';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -54,7 +57,7 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
 
         $result = $ecu->query('post', ['foo' => 'bar']);
 
-        $this->assertRegExp('/foo=bar/', $result);
+        $this->assertMatchesRegularExpression('/foo=bar/', $result);
     }
 
     /** @test */
@@ -64,7 +67,7 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
 
         $result = $ecu->query('post', ['foo' => 'bar'], static::URL . '/echo.php');
 
-        $this->assertRegExp('/foo=bar/', $result);
+        $this->assertMatchesRegularExpression('/foo=bar/', $result);
     }
 
     /** @test */
@@ -76,7 +79,7 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($ecu->isCurlError());
         $this->assertTrue($ecu->isError());
         $this->assertEquals(1, $ecu->getCurlErrorCode());
-        $this->assertRegExp('/not supported or disabled in libcurl/', $ecu->getCurlErrorMessage());
+        $this->assertMatchesRegularExpression('/not supported or disabled in libcurl/', $ecu->getCurlErrorMessage());
 
     }
 
@@ -88,7 +91,7 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
 
         $ecu->setUserAgent('unit test');
         $result = $ecu->post();
-        $this->assertRegExp('/User-Agent: unit test/', $result);
+        $this->assertMatchesRegularExpression('/User-Agent: unit test/', $result);
 
     }
 
@@ -101,7 +104,7 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
         $ecu->setPassword('123');
         $ecu->setLogin('234');
         $result = $ecu->get();
-        $this->assertRegExp('/Authorization: Basic MjM0OjEyMw==/', $result);
+        $this->assertMatchesRegularExpression('/Authorization: Basic MjM0OjEyMw==/', $result);
     }
 
     /** @test */
@@ -111,7 +114,7 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
 
         $ecu->changeContentType('json');
         $result = $ecu->get();
-        $this->assertRegExp('/Content-Type: application\/json/', $result);
+        $this->assertMatchesRegularExpression('/Content-Type: application\/json/', $result);
     }
 
     /** @test */
@@ -120,8 +123,8 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
         $ecu = new EasyCurl(static::URL . '/echo.php');
 
         $result = $ecu->put(['foo' => 'put']);
-        $this->assertRegExp('/PUT/', $result);
-        $this->assertRegExp('/foo=put/', $result);
+        $this->assertMatchesRegularExpression('/PUT/', $result);
+        $this->assertMatchesRegularExpression('/foo=put/', $result);
     }
 
     /** @test */
@@ -130,8 +133,8 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
         $ecu = new EasyCurl(static::URL . '/echo.php');
 
         $result = $ecu->put(['foo' => 'put']);
-        $this->assertRegExp('/PUT/', $result);
-        $this->assertRegExp('/foo=put/', $result);
+        $this->assertMatchesRegularExpression('/PUT/', $result);
+        $this->assertMatchesRegularExpression('/foo=put/', $result);
     }
 
     /** @test */
@@ -140,18 +143,18 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
         $ecu = new EasyCurl(static::URL . '/echo.php');
 
         $result = $ecu->delete(['foo' => 'delete']);
-        $this->assertRegExp('/DELETE/', $result);
-        $this->assertRegExp('/foo=delete/', $result);
+        $this->assertMatchesRegularExpression('/DELETE/', $result);
+        $this->assertMatchesRegularExpression('/foo=delete/', $result);
     }
 
     /** @test */
     public function checkDoesNotExistMethod()
     {
         $ecu = new EasyCurl(static::URL . '/echo.php');
+        $ecu->query('donotexistmethod', ['foo' => 'dne']);
 
-        $result = $ecu->query('donotexistmethod', ['foo' => 'dne']);
-        $this->assertRegExp('/GET/', $result);
-        $this->assertRegExp('/foo: dne/', $result);
+        $this->assertEquals(501, $ecu->getHttpErrorCode());
+        $this->assertEquals('HTTP/1.1 501 Not Implemented', $ecu->getHttpErrorMessage());
     }
 
     /** @test */
@@ -162,8 +165,8 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
         $ecu->setProxy(self::URL);
         $result = $ecu->get();
 
-        $this->assertRegExp('/GET/', $result);
-        $this->assertRegExp('/Proxy-Connection: Keep-Alive/', $result);
+        $this->assertMatchesRegularExpression('/GET/', $result);
+        $this->assertMatchesRegularExpression('/Proxy-Connection: Keep-Alive/', $result);
     }
 
     /** @test */
@@ -191,8 +194,8 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
         $result = $ecu->query();
 
         $this->assertEquals([
-                "test" => "json"
-            ],
+            "test" => "json"
+        ],
             $result
         );
     }
@@ -207,6 +210,6 @@ class EasyCurlTest extends PHPUnit_Framework_TestCase
 
         $result = $ecu->query('POST', ['hello' => 'world']);
 
-        $this->assertRegExp('{"hello":"world"}', $result);
+        $this->assertMatchesRegularExpression('{"hello":"world"}', $result);
     }
 }
