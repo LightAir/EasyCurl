@@ -9,6 +9,9 @@ EasyCurl, its easy CURL wrapper for PHP.
 [![codecov](https://codecov.io/gh/LightAir/EasyCurl/branch/master/graph/badge.svg)](https://codecov.io/gh/LightAir/EasyCurl)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/9945beb63c244e3baddb80b893601805)](https://www.codacy.com/gh/LightAir/EasyCurl/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LightAir/EasyCurl&amp;utm_campaign=Badge_Grade)
 
+# No longer supported
+This package is obsolete and is no longer supported. Use other packages, e.g. guzzle
+
 ## Install
 ```shell
 composer require lightair/easycurl
